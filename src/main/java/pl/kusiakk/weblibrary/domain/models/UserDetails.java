@@ -25,9 +25,6 @@ public class UserDetails {
     @JoinColumn
     private User user;
 
-    public UserDetails() {
-    }
-
     public Integer getUserDetailsID() {
         return userDetailsID;
     }
