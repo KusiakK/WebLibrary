@@ -17,12 +17,10 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer authorID;
 
-    @NotNull
     @NotBlank
     @Column(name = "first_name", nullable= false)
     private String firstName;
 
-    @NotNull
     @NotBlank
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -33,12 +31,7 @@ public class Author implements Serializable {
     @OneToMany(mappedBy = "author")
     private List<Book> books;
 
-    public Author() {
-    }
-
-    public Author(String author) {
-        this.firstName = author;
-    }
+    public Author() {}
 
     public Integer getAuthorID() {
         return authorID;
