@@ -7,6 +7,7 @@ import pl.kusiakk.weblibrary.domain.models.Author;
 import pl.kusiakk.weblibrary.repositories.AuthorRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -18,7 +19,6 @@ public class AuthorService {
     }
 
     public Author save(Author author) {
-
         return authorRepository.save(author);
     }
 
@@ -27,13 +27,15 @@ public class AuthorService {
     }
 
     public Author deleteById(Integer id) throws AuthorNotFoundException {
-        Author existingAuthor = authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
+        Optional<Author> authorOptional = authorRepository.findById(id);
+        Author existingAuthor = authorOptional.orElseThrow(AuthorNotFoundException::new);
         authorRepository.deleteById(id);
         return existingAuthor;
     }
 
     public Author findById(int id) throws AuthorNotFoundException {
-        return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
+        Optional<Author> authorOptional = authorRepository.findById(id);
+        return authorOptional.orElseThrow(AuthorNotFoundException::new);
     }
 
     public List<Author> findAll() {
