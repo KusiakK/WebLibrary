@@ -1,23 +1,19 @@
 package pl.kusiakk.weblibrary.services;
 
+import org.springframework.stereotype.Service;
 import pl.kusiakk.weblibrary.domain.models.User;
+import pl.kusiakk.weblibrary.repositories.UserRepository;
 
+@Service
 public class UserService {
-    private UserService instance;
+
     private UserRepository userRepository;
 
-    private UserService() {
-        userRepository = new UserRepository();
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public UserService getInstance() {
-        if (null == instance) {
-            instance = new UserService();
-        }
-        return instance;
-    }
-
-    public Boolean register(User user) {
-        return null != userRepository.create(user);
+    public User register(User user) {
+        return userRepository.save(user);
     }
 }

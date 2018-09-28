@@ -1,7 +1,6 @@
 package pl.kusiakk.weblibrary.services;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.kusiakk.weblibrary.domain.exceptions.AuthorNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Author;
@@ -12,8 +11,11 @@ import java.util.List;
 @Service
 public class AuthorService {
 
-    @Autowired
     private AuthorRepository authorRepository;
+
+    public AuthorService(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
 
     public Author save(Author author) {
         return authorRepository.save(author);

@@ -1,43 +1,35 @@
 package pl.kusiakk.weblibrary.services;
 
 
+import org.springframework.stereotype.Service;
+import pl.kusiakk.weblibrary.domain.exceptions.BookNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Book;
+import pl.kusiakk.weblibrary.repositories.BookRepository;
 
 import java.util.List;
 
+@Service
 public class BookService {
 
-    private static BookService instance;
     private BookRepository bookRepository;
 
-    private BookService() {
-        bookRepository = new BookRepository();
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
-    public static BookService getInstance() {
-        if (null == instance){
-            instance = new BookService();
-        }
-        return instance;
-    }
-
-    public Boolean add(Book book) {
-        return null != bookRepository.create(book);
-    }
-
-    public Boolean edit(Book book) {
-        return null != bookRepository.update(book);
+    public Book save(Book book) {
+        return bookRepository.save(book);
     }
 
     public void delete(Book book) {
         bookRepository.delete(book);
     }
 
-    public Book get(int id) {
-        return bookRepository.read(id);
+    public Book findById(int id) throws BookNotFoundException {
+        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
-    public List<Book> getAll() {
+    public List<Book> findAll() {
         return bookRepository.findAll();
     }
 }
