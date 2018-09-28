@@ -21,8 +21,14 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public void delete(Book book) {
-        bookRepository.delete(book);
+    public Book delete(Book book) throws BookNotFoundException {
+        return deleteById(book.getBookID());
+    }
+
+    public Book deleteById(Integer id) throws BookNotFoundException {
+        Book existingBook = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        bookRepository.deleteById(id);
+        return existingBook;
     }
 
     public Book findById(int id) throws BookNotFoundException {

@@ -21,12 +21,14 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public void delete(Author author) {
-        authorRepository.delete(author);
+    public Author delete(Author author) throws AuthorNotFoundException {
+        return deleteById(author.getAuthorID());
     }
 
-    public void deleteById(Integer id) {
+    public Author deleteById(Integer id) throws AuthorNotFoundException {
+        Author existingAuthor = authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
         authorRepository.deleteById(id);
+        return existingAuthor;
     }
 
     public Author findById(int id) throws AuthorNotFoundException {

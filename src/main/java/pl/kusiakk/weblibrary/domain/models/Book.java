@@ -36,7 +36,7 @@ public class Book {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
-    @Column(name = "summary", length = 360)
+    @Column(name = "summary", length = 3000)
     private String summary;
 
     @NotBlank
