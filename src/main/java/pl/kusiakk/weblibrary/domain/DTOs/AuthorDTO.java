@@ -1,6 +1,7 @@
 package pl.kusiakk.weblibrary.domain.DTOs;
 
 import org.springframework.data.util.Pair;
+import pl.kusiakk.weblibrary.domain.models.Author;
 import pl.kusiakk.weblibrary.domain.models.Book;
 
 import java.util.List;
@@ -16,11 +17,11 @@ public class AuthorDTO {
 
     private List<Pair<String, Integer>> books;
 
-    public AuthorDTO(String firstName, String lastName, String birthPlace, List<Book> books) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthPlace = birthPlace;
-        books.forEach(
+    public AuthorDTO(Author author) {
+        this.firstName = author.getFirstName();
+        this.lastName = author.getLastName();
+        this.birthPlace = author.getBirthPlace();
+        author.getBooks().forEach(
                 book -> this.books.add(
                         Pair.of(book.getTitle(), book.getBookID())
                 ));
