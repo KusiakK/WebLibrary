@@ -2,11 +2,13 @@ package pl.kusiakk.weblibrary.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.kusiakk.weblibrary.domain.DTOs.BookDTO;
 import pl.kusiakk.weblibrary.domain.exceptions.BookNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Book;
 import pl.kusiakk.weblibrary.repositories.BookRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -19,8 +21,12 @@ public class BookController {
     }
 
     @GetMapping()
-    public List<Book> list() {
-        return repository.findAll();
+    public List<BookDTO> list() {
+        return repository
+                .findAll()
+                .stream()
+                .map(BookDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping()
@@ -30,8 +36,11 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book get(@PathVariable Integer id) throws BookNotFoundException {
-        return repository.findById(id).orElseThrow(
+    public BookDTO get(@PathVariable Integer id) throws BookNotFoundException {
+        return repository
+                .findById(id)
+                .map(BookDTO::new)
+                .orElseThrow(
                 () -> new BookNotFoundException(id.toString())
         );
     }
