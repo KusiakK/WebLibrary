@@ -22,7 +22,11 @@ public class AuthorController {
 
     @GetMapping()
     public List<AuthorDTO> list() {
-        return repository.findAll().stream().map(AuthorDTO::new).collect(Collectors.toList());
+        return repository
+                .findAll()
+                .stream()
+                .map(AuthorDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping()
@@ -33,7 +37,8 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public AuthorDTO get(@PathVariable Integer id) throws AuthorNotFoundException {
-        return repository.findById(id)
+        return repository
+                .findById(id)
                 .map(AuthorDTO::new)
                 .orElseThrow(() -> new AuthorNotFoundException(id.toString())
                 );
