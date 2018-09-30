@@ -18,12 +18,12 @@ public class AuthorController {
         this.repository = repository;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<Author> list() {
         return repository.findAll();
     }
 
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Author create(@RequestBody Author author) {
         return repository.save(author);
