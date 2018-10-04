@@ -22,11 +22,12 @@ public class AuthorController {
 
     @GetMapping()
     public List<AuthorDTO> list() {
-        return repository
+        List<AuthorDTO> list = repository
                 .findAll()
                 .stream()
                 .map(AuthorDTO::new)
                 .collect(Collectors.toList());
+        return list;
     }
 
     @PostMapping()

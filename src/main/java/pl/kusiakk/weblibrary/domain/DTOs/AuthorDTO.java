@@ -2,6 +2,7 @@ package pl.kusiakk.weblibrary.domain.DTOs;
 
 import pl.kusiakk.weblibrary.domain.models.Author;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class AuthorDTO {
         this.firstName = author.getFirstName();
         this.lastName = author.getLastName();
         this.birthPlace = author.getBirthPlace();
+        this.books = new ArrayList<>();
         author.getBooks().forEach(
                 book -> this.books.add(new BookDTO(book)
                 ));
