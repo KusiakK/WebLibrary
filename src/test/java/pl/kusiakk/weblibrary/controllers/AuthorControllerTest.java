@@ -1,7 +1,6 @@
 package pl.kusiakk.weblibrary.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import pl.kusiakk.weblibrary.domain.exceptions.AuthorNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Author;
 import pl.kusiakk.weblibrary.repositories.AuthorRepository;
 
@@ -50,14 +50,15 @@ public class AuthorControllerTest {
 
     @Test
     public void testIfReturnsCorrectSingleAuthor() throws Exception {
-        mockMvc.perform(get("/api/v1/authors/1"))
+        int tolkienId = 1;
+        mockMvc.perform(get("/api/v1/authors/{id}", tolkienId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Tolkien"));
     }
 
     @Test
-    public void testIfPostingCreatesNewAuthor() throws Exception {
+    public void testIfPostCreatesNewAuthor() throws Exception {
         Author author = new Author();
         author.setFirstName("test");
         author.setLastName("test");
@@ -70,6 +71,39 @@ public class AuthorControllerTest {
                 .andExpect(status().isCreated());
 
         assertThat(repository.findAll().size()).isEqualTo(listSize + 1);
+    }
+
+    @Test
+    public void testIfPutModifyExistingAuthor() throws Exception {
+        Author author = new Author();
+        Author testAuthor = null;
+        author.setFirstName("Orson");
+        author.setLastName("Scott");
+        int tolkienId = 1;
+
+        mockMvc.perform(put("/api/v1/authors/{id}", tolkienId)
+                .content(asJsonString(author))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        testAuthor = repository.findById(tolkienId).orElseThrow(AuthorNotFoundException::new);
+
+        assertThat(testAuthor.getLastName()).isEqualTo(author.getLastName());
+    }
+
+    @Test
+    public void testIfDeleteDeletes() throws Exception {
+        int gibsonId = 2;
+
+        mockMvc.perform(get("api/v1/authors/{id}", gibsonId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("api/v1/authors/{id}", gibsonId))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("api/v1/authors/{id}", gibsonId))
+                .andExpect(status().isNotFound());
     }
 
     public static String asJsonString(final Object obj) {

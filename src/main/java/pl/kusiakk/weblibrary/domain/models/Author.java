@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,10 +29,11 @@ public class Author implements Serializable {
     @Column(name = "birth_place")
     private String birthPlace;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Book> books;
 
-    public Author() {}
+    public Author() {
+    }
 
     public Integer getAuthorID() {
         return authorID;

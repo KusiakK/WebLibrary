@@ -44,7 +44,7 @@ public class Book {
     private String title;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Author author;
 

@@ -31,15 +31,14 @@ public class AuthorController {
 
     @GetMapping()
     public List<AuthorDTO> list() {
-        List<AuthorDTO> list = repository
+        return repository
                 .findAll()
                 .stream()
                 .map(AuthorDTO::new)
                 .collect(Collectors.toList());
-        return list;
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Author create(@RequestBody Author author) {
         return repository.save(author);
@@ -61,6 +60,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
         repository.deleteById(id);
     }
