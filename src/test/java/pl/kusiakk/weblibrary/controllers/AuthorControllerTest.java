@@ -100,7 +100,7 @@ public class AuthorControllerTest {
                 .andExpect(status().isOk());
 
         mockMvc.perform(delete("api/v1/authors/{id}", gibsonId))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
 
         mockMvc.perform(get("api/v1/authors/{id}", gibsonId))
                 .andExpect(status().isNotFound());

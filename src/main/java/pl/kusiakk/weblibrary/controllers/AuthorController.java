@@ -60,7 +60,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Integer id) {
         repository.deleteById(id);
     }
