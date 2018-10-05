@@ -20,6 +20,15 @@ public class AuthorController {
         this.repository = repository;
     }
 
+    @GetMapping("/{id}")
+    public AuthorDTO get(@PathVariable Integer id) throws AuthorNotFoundException {
+        return repository
+                .findById(id)
+                .map(AuthorDTO::new)
+                .orElseThrow(() -> new AuthorNotFoundException(id.toString())
+                );
+    }
+
     @GetMapping()
     public List<AuthorDTO> list() {
         List<AuthorDTO> list = repository
@@ -34,15 +43,6 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.CREATED)
     public Author create(@RequestBody Author author) {
         return repository.save(author);
-    }
-
-    @GetMapping("/{id}")
-    public AuthorDTO get(@PathVariable Integer id) throws AuthorNotFoundException {
-        return repository
-                .findById(id)
-                .map(AuthorDTO::new)
-                .orElseThrow(() -> new AuthorNotFoundException(id.toString())
-                );
     }
 
     @PutMapping("/{id}")
