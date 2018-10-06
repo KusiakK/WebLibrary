@@ -29,7 +29,7 @@ public class Author implements Serializable {
     @Column(name = "birth_place")
     private String birthPlace;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private List<Book> books;
 
     public Author() {

@@ -1,6 +1,7 @@
 package pl.kusiakk.weblibrary.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.kusiakk.weblibrary.domain.exceptions.AuthorNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Author;
 import pl.kusiakk.weblibrary.repositories.AuthorRepository;
 
+import java.lang.reflect.Executable;
+
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -64,7 +70,7 @@ public class AuthorControllerTest {
         author.setLastName("test");
         int listSize = repository.findAll().size();
 
-        mockMvc.perform(post("/api/v1/authors")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/authors")
                 .content(asJsonString(author))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -94,16 +100,16 @@ public class AuthorControllerTest {
 
     @Test
     public void testIfDeleteDeletes() throws Exception {
-        int gibsonId = 2;
+        String pathToGibson = "/api/v1/authors/2";
 
-        mockMvc.perform(get("api/v1/authors/{id}", gibsonId))
+        mockMvc.perform(get(pathToGibson))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete("api/v1/authors/{id}", gibsonId))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("api/v1/authors/{id}", gibsonId))
+        mockMvc.perform(delete(pathToGibson))
                 .andExpect(status().isNotFound());
+
+        mockMvc.perform(get(pathToGibson));
+//        TODO add assertion
     }
 
     public static String asJsonString(final Object obj) {

@@ -21,6 +21,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public AuthorDTO get(@PathVariable Integer id) throws AuthorNotFoundException {
         return repository
                 .findById(id)
@@ -60,7 +61,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public void delete(@PathVariable Integer id) {
         repository.deleteById(id);
     }
