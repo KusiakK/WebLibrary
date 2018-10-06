@@ -1,8 +1,8 @@
 package pl.kusiakk.weblibrary.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,11 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.util.NestedServletException;
 import pl.kusiakk.weblibrary.domain.exceptions.AuthorNotFoundException;
 import pl.kusiakk.weblibrary.domain.models.Author;
 import pl.kusiakk.weblibrary.repositories.AuthorRepository;
 
-import java.lang.reflect.Executable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -108,8 +109,11 @@ public class AuthorControllerTest {
         mockMvc.perform(delete(pathToGibson))
                 .andExpect(status().isNotFound());
 
-        mockMvc.perform(get(pathToGibson));
-//        TODO add assertion
+        Executable executable = () -> {
+            mockMvc.perform(get(pathToGibson));
+        };
+
+        assertThrows(NestedServletException.class, executable);
     }
 
     public static String asJsonString(final Object obj) {

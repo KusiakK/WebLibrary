@@ -26,7 +26,8 @@ public class AuthorController {
         return repository
                 .findById(id)
                 .map(AuthorDTO::new)
-                .orElseThrow(() -> new AuthorNotFoundException(id.toString())
+                .orElseThrow(() ->
+                        new AuthorNotFoundException(id.toString())
                 );
     }
 
